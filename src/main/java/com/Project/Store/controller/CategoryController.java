@@ -28,7 +28,7 @@ public class CategoryController {
         return categoryServices.getAllCategory();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getcCattegoryById(@PathVariable Long id){
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id){
         Category cate = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy mã sách: "+id));
         return ResponseEntity.ok(cate);
