@@ -109,4 +109,8 @@ public class UserController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+    @GetMapping("/all")
+    public List<User> getAllUser(){
+        return  userRepository.findAll();
+    }
 }

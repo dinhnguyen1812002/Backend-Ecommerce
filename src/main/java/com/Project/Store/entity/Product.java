@@ -23,8 +23,8 @@ public class Product {
     private Double price;
 
     @NotEmpty(message = "Image is required")
-    @Lob
-    private byte[] image;
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "Category_id")
     private Category category;

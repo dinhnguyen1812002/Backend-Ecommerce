@@ -23,18 +23,17 @@ public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
     @GetMapping
-    //Tìm tất cả sách
     public List<Category> getAllBook()
     {
         return categoryServices.getAllCategory();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getBookById(@PathVariable Long id){
+    public ResponseEntity<Category> getcCattegoryById(@PathVariable Long id){
         Category cate = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy mã sách: "+id));
         return ResponseEntity.ok(cate);
     }
-    @PostMapping
+    @PostMapping("/add")
     public Category createCategory(@RequestBody Category category){
 
         return categoryServices.saveCategory(category);

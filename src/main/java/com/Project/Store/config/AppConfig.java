@@ -55,12 +55,14 @@ public class AppConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers("/api/auth/**")
                         .permitAll()
-                        .requestMatchers("/api/category/")
-                        .permitAll()
-                        .requestMatchers("/api/category/{id}")
-                        .hasAnyAuthority("ROLE_ADMIN")
+                        .requestMatchers("/**").permitAll()
+
+//                        .permitAll()
+//                                .requestMatchers("/api/category/add","/api/category/{id}" )
+//                                .permitAll()
+//                                .requestMatchers("/api/product").permitAll()
                         )
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
