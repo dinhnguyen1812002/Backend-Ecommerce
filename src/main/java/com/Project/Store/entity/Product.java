@@ -22,10 +22,10 @@ public class Product {
     @DecimalMin(value = "0.01", message = "Price must be greater than or equal to 0.01")
     private Double price;
 
-    @NotEmpty(message = "Image is required")
+    @Column(name = "image")
     private String image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Category_id")
     private Category category;
 

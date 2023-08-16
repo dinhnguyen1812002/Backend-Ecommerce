@@ -4,6 +4,7 @@ import com.Project.Store.security.jwt.AuthEntryPointJwt;
 import com.Project.Store.security.jwt.AuthTokenFilter;
 import com.Project.Store.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -71,4 +72,6 @@ public class AppConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return httpSecurity.build();
     }
+
+
 }

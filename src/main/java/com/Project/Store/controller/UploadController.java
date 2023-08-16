@@ -16,14 +16,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 @RestController
 
 @RequestMapping("/api/upload")
+
 public class UploadController {
     String IMAGE_FOLDER = "./src/main/resources/images/";
+
     @PostMapping("")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile uploadfile) {
 
@@ -34,7 +35,7 @@ public class UploadController {
         }
 
         try {
-            String[] fileUrls = saveUploadedFiles(Arrays.asList(uploadfile));
+            String[] fileUrls = saveUploadedFiles(List.of(uploadfile));
             rr.setMessage(fileUrls[0]);
         } catch (IOException e) {
             return ResponseEntity.badRequest().build();
@@ -43,6 +44,8 @@ public class UploadController {
         rr.setStatusCode(200);
         return ResponseEntity.ok(rr);
     }
+
+    //save file
     private String[] saveUploadedFiles(List<MultipartFile> files) throws IOException {
         String[] fileUrls = new String[files.size()];
         int index = 0;
@@ -54,7 +57,7 @@ public class UploadController {
             byte[] bytes = file.getBytes();
             long TICKS_AT_EPOCH = 621355968000000000L;
             long tick = System.currentTimeMillis()*10000 + TICKS_AT_EPOCH;
-            String filename = String.valueOf(tick).concat("_").concat(file.getOriginalFilename());
+            String filename = String.valueOf(tick).concat("_").concat(Objects.requireNonNull(file.getOriginalFilename()));
 
             Path path = Paths.get(IMAGE_FOLDER+filename);
             Files.write(path, bytes);
@@ -63,6 +66,7 @@ public class UploadController {
         }
         return fileUrls;
     }
+
     protected String getBaseEnvLinkURL() {
         String baseEnvLinkURL=null;
         HttpServletRequest currentRequest =
@@ -76,5 +80,4 @@ public class UploadController {
         }
         return baseEnvLinkURL;
     }
-
 }
