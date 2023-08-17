@@ -2,13 +2,17 @@ package com.Project.Store.controller;
 
 import com.Project.Store.entity.Category;
 import com.Project.Store.entity.Product;
+import com.Project.Store.exception.CustomErrorException;
 import com.Project.Store.exception.NotFoundException;
 import com.Project.Store.repository.CategoryRepository;
 import com.Project.Store.repository.ProductRepository;
 import com.Project.Store.services.CategoryServices;
 import com.Project.Store.services.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,15 +45,22 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody Product product,Long categoryId) {
-        Category cat = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Category not found with id: " + categoryId));
+    public ResponseEntity<String> create(@Valid @RequestBody Product product) {
+        try {
+            Category cat = categoryRepository.findById(product.getCategory().getId())
+                    .orElseThrow(() -> new NotFoundException("not found"));
 
-        product.setCategory(cat);
-        Product newProduct = productRepository.save(product);
-
-        return ResponseEntity.ok(newProduct);
+            product.setCategory(cat);
+            Product newProduct = productRepository.save(product);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Product created successfully");
+        }catch (NullPointerException e){
+            throw new CustomErrorException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
                                           @Valid @RequestBody Product product) {
@@ -60,7 +71,7 @@ public class ProductController {
         oldProduct.setTitle(product.getTitle());
         oldProduct.setPrice(product.getPrice());
         oldProduct.setImage(product.getImage());
-
+        oldProduct.setCategory(product.getCategory());
         Product updProduct = productRepository.save(oldProduct);
         return ResponseEntity.ok(updProduct);
     }

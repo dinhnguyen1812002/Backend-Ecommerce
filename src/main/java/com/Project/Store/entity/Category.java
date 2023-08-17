@@ -8,7 +8,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
+
 
 @Data
 @Entity
@@ -23,18 +24,15 @@ public class Category {
     @Size(max = 50, message = "Category name must be at most 50 characters")
     private String name;
 
-    private String Description;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Product> listProduct;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Product> product;
 
     public Category() {
     }
 
-    public Category(Long id, String name, String description, List<Product> listProduct) {
+    public Category(Long id, String name, Set<Product> product) {
         this.id = id;
         this.name = name;
-        Description = description;
-        this.listProduct = listProduct;
+        this.product = product;
     }
 }
