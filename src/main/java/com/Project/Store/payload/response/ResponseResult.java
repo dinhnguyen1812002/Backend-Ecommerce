@@ -1,4 +1,4 @@
-package com.Project.Store.entity;
+package com.Project.Store.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

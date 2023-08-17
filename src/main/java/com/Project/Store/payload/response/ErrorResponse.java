@@ -1,4 +1,4 @@
-package com.Project.Store.entity;
+package com.Project.Store.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

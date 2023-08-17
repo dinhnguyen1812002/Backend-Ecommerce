@@ -1,6 +1,9 @@
-package com.Project.Store.exception;
+package com.Project.Store.controller;
 
-import com.Project.Store.entity.ErrorResponse;
+import com.Project.Store.exception.CustomErrorException;
+import com.Project.Store.exception.CustomParameterConstraintException;
+import com.Project.Store.exception.NotFoundException;
+import com.Project.Store.payload.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -64,21 +67,13 @@ class CustomControllerAdvice {
         String stackTrace = stringWriter.toString();
 
         return new ResponseEntity<>(
-                new ErrorResponse(
-                        status,
-                        customErrorException.getMessage(),
-                        stackTrace,
-                        customErrorException.getData()
-                ),
-                status
-        );
+                new ErrorResponse(status, customErrorException.getMessage(),
+                        stackTrace, customErrorException.getData()), status);
     }
 
     // fallback method
     @ExceptionHandler(Exception.class) // exception handled
-    public ResponseEntity handleExceptions(
-            Exception e
-    ) {
+    public ResponseEntity handleExceptions(Exception e) {
         // ... potential custom logic
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
@@ -90,12 +85,6 @@ class CustomControllerAdvice {
         String stackTrace = stringWriter.toString();
 
         return new ResponseEntity<>(
-                new ErrorResponse(
-                        status,
-                        e.getMessage(),
-                        stackTrace // specifying the stack trace in case of 500
-                ),
-                status
-        );
+                new ErrorResponse(status, e.getMessage(), stackTrace), status);
     }
 }

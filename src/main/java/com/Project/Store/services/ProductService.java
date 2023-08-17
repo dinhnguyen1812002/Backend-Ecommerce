@@ -1,23 +1,21 @@
 package com.Project.Store.services;
 
-import com.Project.Store.controller.UploadController;
 import com.Project.Store.entity.Product;
 import com.Project.Store.exception.NotFoundException;
-import com.Project.Store.repository.CategoryRepository;
-import com.Project.Store.repository.ProductRepository;
+import com.Project.Store.repository.ICategoryRepository;
+import com.Project.Store.repository.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
 public class ProductService {
     @Autowired
-    ProductRepository productRepository;
+    IProductRepository productRepository;
     @Autowired
-    CategoryRepository categoryRepository;
+    ICategoryRepository ICategoryRepository;
     public void deleteProdct(Long id){
         productRepository.deleteById(id);
     }
@@ -27,5 +25,12 @@ public class ProductService {
     public Product findById(Long id){
        return productRepository.findById(id).orElseThrow(()-> new NotFoundException("not found:"+ id));
     }
+    public Iterator<Product> findAll(){
+        return productRepository.findAll().iterator();
+    }
+    public Product save(Product product){
+       return productRepository.save(product);
+    }
+
 
 }

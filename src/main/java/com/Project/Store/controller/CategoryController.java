@@ -2,12 +2,11 @@ package com.Project.Store.controller;
 
 import com.Project.Store.entity.Category;
 import com.Project.Store.exception.NotFoundException;
-import com.Project.Store.repository.CategoryRepository;
+import com.Project.Store.repository.ICategoryRepository;
 import com.Project.Store.services.CategoryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class CategoryController {
     @Autowired
     CategoryServices categoryServices;
     @Autowired
-    CategoryRepository categoryRepository;
+    ICategoryRepository ICategoryRepository;
     @GetMapping
     public List<Category> getAllBook()
     {
@@ -29,8 +28,7 @@ public class CategoryController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id){
-        Category cate = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy mã sách: "+id));
+        Category cate = categoryServices.getCategoryById(id);
         return ResponseEntity.ok(cate);
     }
     @PostMapping("/add")
@@ -41,18 +39,17 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category)
     {
-        Optional<Category> categoryUpdate = categoryRepository.findById(id);
+        Optional<Category> categoryUpdate = ICategoryRepository.findById(id);
         return  categoryUpdate.map(category1->{
             category.setId(category.getId());
-             return new ResponseEntity<>(categoryRepository.save(category),HttpStatus.OK);
+             return new ResponseEntity<>(ICategoryRepository.save(category),HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Category> deleteCategory(@PathVariable Long id)
     {
-        Category deleteCategory = categoryRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("Không tìm thấy mã sách: "+id));
+        Category deleteCategory = categoryServices.getCategoryById(id);
         categoryServices.deleteCategory(id);
         return ResponseEntity.ok(deleteCategory);
     }
