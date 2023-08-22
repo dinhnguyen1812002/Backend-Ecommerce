@@ -20,7 +20,6 @@ class CustomControllerAdvice {
     ) {
         HttpStatus status = HttpStatus.NOT_FOUND; // 404
 
-        // converting the stack trace to String
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
@@ -78,12 +77,10 @@ class CustomControllerAdvice {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
 
-        // converting the stack trace to String
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
         String stackTrace = stringWriter.toString();
-
         return new ResponseEntity<>(
                 new ErrorResponse(status, e.getMessage(), stackTrace), status);
     }

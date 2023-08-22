@@ -58,10 +58,6 @@ public class SercurityConfig {
                         .permitAll()
                         .requestMatchers("/**").permitAll()
 
-//                        .permitAll()
-//                                .requestMatchers("/api/category/add","/api/category/{id}" )
-//                                .permitAll()
-//                                .requestMatchers("/api/product").permitAll()
                         )
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -70,6 +66,5 @@ public class SercurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return httpSecurity.build();
     }
-
 
 }

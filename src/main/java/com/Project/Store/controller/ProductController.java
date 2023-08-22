@@ -3,9 +3,7 @@ package com.Project.Store.controller;
 import com.Project.Store.entity.Category;
 import com.Project.Store.entity.Product;
 import com.Project.Store.exception.CustomErrorException;
-import com.Project.Store.exception.NotFoundException;
-import com.Project.Store.repository.ICategoryRepository;
-import com.Project.Store.repository.IProductRepository;
+
 import com.Project.Store.services.CategoryServices;
 import com.Project.Store.services.ProductService;
 
