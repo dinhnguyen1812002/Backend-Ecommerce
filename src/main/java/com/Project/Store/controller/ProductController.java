@@ -4,6 +4,7 @@ import com.Project.Store.entity.Category;
 import com.Project.Store.entity.Product;
 import com.Project.Store.exception.CustomErrorException;
 
+import com.Project.Store.exception.NotFoundException;
 import com.Project.Store.services.CategoryServices;
 import com.Project.Store.services.ProductService;
 
@@ -31,7 +32,7 @@ public class ProductController {
     }
     @GetMapping
     public Iterable<Product> findAll(){
-        List<Product> products = new ArrayList<>();
+        List<Product> products = new LinkedList<>();
         Iterator<Product> iterator = productService.findAll();
         iterator.forEachRemaining(products::add);
         Collections.reverse(products);
@@ -40,12 +41,13 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody Product product) {
+    public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
         try {
             Category cat = categoryServices.getCategoryById(product.getCategory().getId());
             product.setCategory(cat);
             Product newProduct = productService.save(product);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Product created successfully");
+//            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+            return ResponseEntity.ok(newProduct);
         }catch (NullPointerException e){
             throw new CustomErrorException(
                     HttpStatus.NOT_FOUND,
@@ -75,5 +77,18 @@ public class ProductController {
         Product deleteProduct = productService.findById(id);
         productService.deleteProdct(id);
         return ResponseEntity.ok(deleteProduct);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<LinkedList<Product>> searchProduct(@RequestParam("query") String query){
+        try {
+            LinkedList<Product> search = productService.search(query);
+            return ResponseEntity.ok(search);
+        }catch (Exception e){
+            throw new CustomErrorException (
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+
     }
 }

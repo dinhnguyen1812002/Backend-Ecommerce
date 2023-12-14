@@ -28,5 +28,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Category_id")
     private Category category;
+    @Lob
+    private byte[] imagestr;
 
 }

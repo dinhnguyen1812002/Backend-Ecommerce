@@ -5,10 +5,13 @@ import com.Project.Store.exception.NotFoundException;
 import com.Project.Store.repository.ICategoryRepository;
 import com.Project.Store.repository.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -31,6 +34,10 @@ public class ProductService {
     public Product save(Product product){
        return productRepository.save(product);
     }
+    public LinkedList<Product> search (String query){
+        LinkedList<Product> searchProduct = productRepository.searcProducts(query);
 
+        return searchProduct;
+    }
 
 }
