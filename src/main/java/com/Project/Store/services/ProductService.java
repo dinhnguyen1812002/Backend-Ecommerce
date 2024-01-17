@@ -35,9 +35,8 @@ public class ProductService {
        return productRepository.save(product);
     }
     public LinkedList<Product> search (String query){
-        LinkedList<Product> searchProduct = productRepository.searcProducts(query);
 
-        return searchProduct;
+        return productRepository.searcProducts(query);
     }
 
 }

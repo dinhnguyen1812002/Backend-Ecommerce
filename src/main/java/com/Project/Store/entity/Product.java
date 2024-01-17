@@ -26,7 +26,11 @@ public class Product {
     private String image;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Category_id")
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     private Category category;
     @Lob
     private byte[] imagestr;

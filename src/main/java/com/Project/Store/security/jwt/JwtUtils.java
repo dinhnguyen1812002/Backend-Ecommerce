@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-    private String jwtSecret ="50645367566B597033733676397924423F4528482B4D6251655468576D5A7134";
+    private String jwtSecret ="B5aBLeLswVb/ixa5wjpcd2Z3nGSbuviXNskFWTfv5pA=";
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
@@ -28,10 +29,12 @@ public class JwtUtils {
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     private Key key() {
         return Keys
                 .hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
+
     public String getUserNameFromJwtToken(String token) {
         return Jwts.
                 parserBuilder().

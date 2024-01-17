@@ -27,20 +27,18 @@ public class OrderDetailServices {
         List<OrderQuantity> orderQuantityList = orderInput.getOrderQuantities();
 
         for (OrderQuantity orderQuantity : orderQuantityList) {
-//            Product product = (Product) productRepository.findAllById(Collections.singleton(orderQuantity.getProductID()));
             Product product = productRepository.findById(orderQuantity.getProductID()).get();
 
             String current_user = AuthTokenFilter.CURRENT_USER;
-            User user = userRepository.findByUsername(current_user).get();
+            User user = userRepository.findById(current_user).get();
             OrderDetail orderDetail = new OrderDetail(
                     orderInput.getName(),
                     orderInput.getAddress(),
                     orderInput.getPhoneNumber(),
                     ORDER_PLACE,
-                    product.getPrice()* orderQuantity.getQuantity(),
+                    product.getPrice() * orderQuantity.getQuantity(),
                     product,
                     user
-
             );
             orderDetailRepo.save(orderDetail);
         }

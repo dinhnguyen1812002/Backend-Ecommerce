@@ -1,6 +1,7 @@
 package com.Project.Store.services;
 
 import com.Project.Store.entity.User;
+import com.Project.Store.exception.NotFoundException;
 import com.Project.Store.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     IUserRepository IUserRepository;
+
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -21,5 +24,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return UserDetailsImpl.build(user);
     }
+//
+//    @Transactional
+//    public UserDetails loadUserByUserID(String id) throws NotFoundException {
+//        User user = IUserRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("User Not Found with id: " + id));
+//
+//        return UserDetailsImpl.build(user);
+//    }
+
 
 }

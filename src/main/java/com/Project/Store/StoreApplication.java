@@ -1,5 +1,6 @@
 package com.Project.Store;
 
+
 import com.Project.Store.entity.ERole;
 import com.Project.Store.entity.Role;
 import com.Project.Store.repository.IRoleRepository;
@@ -10,17 +11,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class StoreApplication  implements CommandLineRunner {
-	@Autowired
-    IRoleRepository IRoleRepository;
-	public static void main(String[] args) {
-		SpringApplication.run(StoreApplication.class, args);
-	}
+    @Autowired
+    IRoleRepository roleRepository;
+    public static void main(String[] args) {
+        SpringApplication.run(StoreApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		Role admin = new Role(1L, ERole.ROLE_ADMIN);
-		Role user = new Role(2L, ERole.ROLE_USER);
-		IRoleRepository.save(admin);
-		IRoleRepository.save(user);
-	}
+
+    @Override
+    public void run(String... args) throws Exception {
+        Role user = new Role(1L, ERole.ADMIN);
+        Role admin = new Role(2L, ERole.USER);
+        roleRepository.save(user);
+        roleRepository.save(admin);
+    }
 }

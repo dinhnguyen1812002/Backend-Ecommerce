@@ -40,7 +40,7 @@ public class ProductController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
         try {
             Category cat = categoryServices.getCategoryById(product.getCategory().getId());
@@ -72,12 +72,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> deleteCategory(@PathVariable Long id)
+    public ResponseEntity<Product> delete(@PathVariable Long id)
     {
         Product deleteProduct = productService.findById(id);
         productService.deleteProdct(id);
         return ResponseEntity.ok(deleteProduct);
     }
+
     @GetMapping("/search")
     public ResponseEntity<LinkedList<Product>> searchProduct(@RequestParam("query") String query){
         try {
@@ -89,6 +90,5 @@ public class ProductController {
                     e.getMessage()
             );
         }
-
     }
 }

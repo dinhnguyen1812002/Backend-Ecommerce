@@ -1,7 +1,8 @@
 package com.Project.Store.controller;
 
 import com.Project.Store.entity.Category;
-import com.Project.Store.exception.NotFoundException;
+import com.Project.Store.payload.response.ApiResponse;
+import com.Project.Store.payload.response.MessageResponse;
 import com.Project.Store.repository.ICategoryRepository;
 import com.Project.Store.services.CategoryServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,15 @@ public class CategoryController {
         return ResponseEntity.ok(cate);
     }
     @PostMapping("/add")
-    public Category createCategory(@RequestBody Category category){
+    public ResponseEntity<MessageResponse> createCategory(@RequestBody Category category){
+        if(categoryServices.isCategoryExit(category)){
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse("category is exit"));
+        }
+        Category saveCategory =  categoryServices.saveCategory(category);
 
-        return categoryServices.saveCategory(category);
+        return ResponseEntity.ok(new MessageResponse("Ok"));
     }
     @PutMapping("/{id}")
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category)

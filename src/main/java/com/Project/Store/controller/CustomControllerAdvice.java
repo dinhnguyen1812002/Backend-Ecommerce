@@ -54,7 +54,7 @@ class CustomControllerAdvice {
     public ResponseEntity<ErrorResponse> handleCustomErrorExceptions(
             Exception e
     ) {
-        // casting the generic Exception e to CustomErrorException
+
         CustomErrorException customErrorException = (CustomErrorException) e;
 
         HttpStatus status = customErrorException.getStatus();
@@ -75,7 +75,7 @@ class CustomControllerAdvice {
     public ResponseEntity handleExceptions(Exception e) {
         // ... potential custom logic
 
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
