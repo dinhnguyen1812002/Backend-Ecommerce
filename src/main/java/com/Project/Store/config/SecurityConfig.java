@@ -54,38 +54,37 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws  Exception{
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->auth
-                                .requestMatchers("/api/auth/**")
-                                .permitAll()
-                                .requestMatchers("/api/product/{id}")
-                                .hasAuthority("ADMIN")
-                                .requestMatchers("/api/product")
-                                .permitAll()
-                                .requestMatchers("/api/product/create")
-                                .hasAuthority("ADMIN")
-                                .requestMatchers("/api/product/{id}")
-                                .hasAuthority("ADMIN")
-                                .requestMatchers("/api/category/add")
-                                .hasAnyAuthority("ADMIN")
-                                .requestMatchers( "/api/category/{id}")
-                                .hasAuthority("ADMIN")
-                                .requestMatchers("/api/category")
-                                .permitAll()
-                                .requestMatchers("/api/upload")
-                                .permitAll()
-                                .requestMatchers("/api/cart/**").authenticated()
-                                .requestMatchers("/placeOrder").permitAll()
-                        )
-                .sessionManagement(session->session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection for stateless API
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**")
+                        .permitAll()
+                        .requestMatchers("/api/product/{id}")
+                        .hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/product", "/api/product/best-selling")
+                        .permitAll()
+                        .requestMatchers("/api/product/create", "/api/product/add", "/api/product/{id}")
+                        .hasAuthority("ADMIN")
+                        .requestMatchers("/api/category/add", "/api/category/{id}")
+                        .hasAnyAuthority("ADMIN")
+                        .requestMatchers("/api/category")
+                        .permitAll()
+                        .requestMatchers("/api/upload")
+                        .permitAll()
+                        .requestMatchers("/api/cart/**")
+                        .authenticated()
+                        .requestMatchers("/placeOrder")
+                        .hasAnyAuthority("USER")
+                        .requestMatchers("/checkout")
+                        .hasAnyAuthority("USER")
+
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return httpSecurity.build();
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
+
 
 }

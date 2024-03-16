@@ -18,7 +18,7 @@ class CustomControllerAdvice {
     public ResponseEntity<ErrorResponse> handleCustomDataNotFoundExceptions(
             Exception e
     ) {
-        HttpStatus status = HttpStatus.NOT_FOUND; // 404
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);

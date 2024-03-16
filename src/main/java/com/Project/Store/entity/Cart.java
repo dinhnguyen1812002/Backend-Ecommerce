@@ -25,7 +25,6 @@ public class Cart {
     @ManyToOne
     private User user;
 
-
     public Cart(Product product, User user) {
         this.product = product;
         this.user = user;

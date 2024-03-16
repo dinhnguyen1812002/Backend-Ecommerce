@@ -34,7 +34,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String userID = jwtUtils.getUserNameFromJwtToken(jwt);
+                String userID = jwtUtils.getUserIDFromJwtToken(jwt);
                 CURRENT_USER = userID;
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userID);
                 UsernamePasswordAuthenticationToken authentication =
@@ -54,11 +54,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
-
         return null;
     }
 }

@@ -16,11 +16,12 @@ public class OrderDetail {
     private String orderContactNumber;
     private String orderStatus;
     private Double orderAmount;
+    private int quantity;
+    private double totalPrice;
     @OneToOne
     private Product product;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
 
     public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber,
                        String orderStatus, Double orderAmount, Product product, User user) {

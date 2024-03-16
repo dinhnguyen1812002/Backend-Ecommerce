@@ -32,6 +32,8 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Category category;
+    @Transient
+    private Long totalQuantitySold;
     @Lob
     private byte[] imagestr;
 

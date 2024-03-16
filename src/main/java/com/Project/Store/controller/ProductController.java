@@ -46,13 +46,27 @@ public class ProductController {
             Category cat = categoryServices.getCategoryById(product.getCategory().getId());
             product.setCategory(cat);
             Product newProduct = productService.save(product);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
             return ResponseEntity.ok(newProduct);
         }catch (NullPointerException e){
             throw new CustomErrorException(
                     HttpStatus.NOT_FOUND,
                     e.getMessage()
             );
+        }
+    }
+    @PostMapping("/add")
+    public ResponseEntity<List<Product>> createProduct(@Valid @RequestBody List<Product> products) {
+        try {
+            List<Product> createdProducts = new ArrayList<>();
+            for (Product product : products) {
+                Category cat = categoryServices.getCategoryById(product.getCategory().getId());
+                product.setCategory(cat);
+                Product newProduct = (Product) productService.saveAll(products);
+                createdProducts.add(newProduct);
+            }
+            return ResponseEntity.ok(createdProducts);
+        } catch (NullPointerException e) {
+            throw new CustomErrorException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -89,6 +103,15 @@ public class ProductController {
                     HttpStatus.NOT_FOUND,
                     e.getMessage()
             );
+        }
+    }
+    @GetMapping("/best-selling")
+    public ResponseEntity<Product> getBestSellingProduct() {
+        Product bestSellingProduct = productService.getBestSellingProduct();
+        if (bestSellingProduct != null) {
+            return ResponseEntity.ok(bestSellingProduct);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }
