@@ -60,16 +60,7 @@ To get started with the application, follow these steps:
 
    ```
    http://localhost:8080/swagger-ui.html
-   ```
-
-6. **Start using the application**:
-
-   You can now start using the application by making requests to the exposed API endpoints. Use tools like Postman or Swagger UI for testing the endpoints.
-
 
 ## Contact
-
-If you have any questions or suggestions, feel free to reach out to us:
-
 - Email: dinhnguyen1812002@gmail.com
 - GitHub: https://github.com/dinhnguyen1812002
