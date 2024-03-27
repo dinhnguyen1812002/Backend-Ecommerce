@@ -72,4 +72,4 @@ To get started with the application, follow these steps:
 If you have any questions or suggestions, feel free to reach out to us:
 
 - Email: dinhnguyen1812002@gmail.com
-- GitHub: [YourGitHubUsername](https://github.com/dinhnguyen1812002)
+- GitHub: https://github.com/dinhnguyen1812002
