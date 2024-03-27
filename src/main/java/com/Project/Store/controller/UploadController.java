@@ -1,6 +1,7 @@
 package com.Project.Store.controller;
 
 import com.Project.Store.payload.response.ResponseResult;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -20,8 +21,8 @@ import java.util.List;
 import java.util.Objects;
 @RestController
 
-@RequestMapping("/api/upload")
-
+@RequestMapping("/api/v1/upload")
+@SecurityRequirement(name = "Bearer-Authentication")
 public class UploadController {
     String IMAGE_FOLDER = "./src/main/resources/images/";
 

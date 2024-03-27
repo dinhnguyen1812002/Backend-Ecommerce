@@ -5,6 +5,7 @@ import com.Project.Store.payload.response.ApiResponse;
 import com.Project.Store.payload.response.MessageResponse;
 import com.Project.Store.repository.ICategoryRepository;
 import com.Project.Store.services.CategoryServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/category")
+@RequestMapping("/api/v1/category")
 
 public class CategoryController {
     @Autowired
@@ -33,6 +34,7 @@ public class CategoryController {
         return ResponseEntity.ok(cate);
     }
     @PostMapping("/add")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<MessageResponse> createCategory(@RequestBody Category category){
         if(categoryServices.isCategoryExit(category)){
             return ResponseEntity
@@ -44,6 +46,7 @@ public class CategoryController {
         return ResponseEntity.ok(new MessageResponse("Ok"));
     }
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category)
     {
         Optional<Category> categoryUpdate = ICategoryRepository.findById(id);
@@ -54,6 +57,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<Category> deleteCategory(@PathVariable Long id)
     {
         Category deleteCategory = categoryServices.getCategoryById(id);

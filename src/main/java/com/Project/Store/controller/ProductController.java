@@ -8,6 +8,7 @@ import com.Project.Store.exception.NotFoundException;
 import com.Project.Store.services.CategoryServices;
 import com.Project.Store.services.ProductService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/product")
+@RequestMapping("/api/v1/product")
 public class ProductController {
     @Autowired
     ProductService productService;
@@ -38,9 +39,19 @@ public class ProductController {
         Collections.reverse(products);
         return products;
     }
+    @GetMapping("/{id}")
 
+    public ResponseEntity<Product> findById(@PathVariable(value = "id") Long id){
+            Product product = productService.findById(id);
+        if (product != null) {
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/create")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
         try {
             Category cat = categoryServices.getCategoryById(product.getCategory().getId());
@@ -55,13 +66,14 @@ public class ProductController {
         }
     }
     @PostMapping("/add")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<List<Product>> createProduct(@Valid @RequestBody List<Product> products) {
         try {
             List<Product> createdProducts = new ArrayList<>();
             for (Product product : products) {
                 Category cat = categoryServices.getCategoryById(product.getCategory().getId());
                 product.setCategory(cat);
-                Product newProduct = (Product) productService.saveAll(products);
+                Product newProduct = productService.save(product);
                 createdProducts.add(newProduct);
             }
             return ResponseEntity.ok(createdProducts);
@@ -71,6 +83,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
                                           @Valid @RequestBody Product product) {
         Product oldProduct = productService.findById(id);
@@ -86,9 +99,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Bearer-Authentication")
     public ResponseEntity<Product> delete(@PathVariable Long id)
     {
-        Product deleteProduct = productService.findById(id);
+        Product deleteProduct = productService.findById(id); 
         productService.deleteProdct(id);
         return ResponseEntity.ok(deleteProduct);
     }

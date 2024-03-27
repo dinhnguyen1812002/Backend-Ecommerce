@@ -23,10 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
     @Autowired
     UserDetailsServiceImpl userDetailsService;
     @Autowired
-    private  AuthTokenFilter jwtAuthFilter;
+    private AuthTokenFilter jwtAuthFilter;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
@@ -44,6 +45,7 @@ public class SecurityConfig {
 
         return authProvider;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
@@ -53,38 +55,29 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection for stateless API
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
-                        .requestMatchers("/api/product/{id}")
-                        .hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/product", "/api/product/best-selling")
-                        .permitAll()
-                        .requestMatchers("/api/product/create", "/api/product/add", "/api/product/{id}")
-                        .hasAuthority("ADMIN")
-                        .requestMatchers("/api/category/add", "/api/category/{id}")
-                        .hasAnyAuthority("ADMIN")
-                        .requestMatchers("/api/category")
-                        .permitAll()
-                        .requestMatchers("/api/upload")
-                        .permitAll()
-                        .requestMatchers("/api/cart/**")
-                        .authenticated()
-                        .requestMatchers("/placeOrder")
-                        .hasAnyAuthority("USER")
-                        .requestMatchers("/checkout")
-                        .hasAnyAuthority("USER")
-
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests(auth -> auth
+                        .requestMatchers("/swagger-ui.html", "/v1/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/product", "/api/product/{id}", "/api/product/best-selling").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/product/create", "/api/product/add").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/product/{id}").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/product/{id}").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/category/add").hasAnyAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/category/{id}").hasAnyAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/category/{id}").hasAnyAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/category").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/upload").permitAll()
+                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/api/placeOrder").hasAnyAuthority("USER")
+                        .requestMatchers("/checkout").hasAnyAuthority("USER")
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
 }

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/v1/cart")
 public class CartController {
     @Autowired
     IProductRepository productRepository;
@@ -36,10 +36,7 @@ public class CartController {
         cartServices.addToCart(productId);
         return ResponseEntity.ok(new MessageResponse("Ban vua quang tien qua cua so"));
     }
-//    @GetMapping("/getCartDetail")
-//    public List<Cart> getCartDetail(){
-//        return cartServices.getCartDetail();
-//    }
+
     @GetMapping("/getCartDetail")
     public List<Cart> cartDetail(){
         List<Cart> cartDetail =  cartServices.getCartDetail();
